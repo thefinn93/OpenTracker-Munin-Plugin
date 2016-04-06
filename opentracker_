@@ -42,7 +42,7 @@ use warnings;
 use File::Basename;
 use LWP::UserAgent;
 
-if (basename($0) !~ /^opentracker(4|6|)_/) {
+if (basename($0) !~ /^opentracker(.*)_/) {
     print "This script needs to be named opentracker_ and have symlinks which start the same.\n";
     exit 1;
 }
@@ -202,7 +202,7 @@ $graphs{udp4} = {
 
 if (defined $ARGV[0] && $ARGV[0] eq 'config') {
     # Lets take the plugin from the execution name.
-    $0 =~ /opentracker(4|6|)_(.+)*/;
+    $0 =~ /opentracker(.*)_(.+)*/;
     my $plugin = $2;
     # And lets make sure we have a plugin called that.
     die 'Unknown Plugin Specified: ' . ($plugin ? $plugin : '') unless $graphs{$plugin};
@@ -268,7 +268,7 @@ fetch_output();
 
 sub fetch_output {
     # Lets figure out what plugin they want to run, and check that it exists
-    $0 =~ /opentracker(4|6|)_(.+)*/;
+    $0 =~ /opentracker(.*)_(.+)*/;
     my $plugin = $2;
     die 'Unknown Plugin Specified: ' . ($plugin ? $plugin : '') unless $graphs{$plugin};
     # Lets print out the data for our plugin
