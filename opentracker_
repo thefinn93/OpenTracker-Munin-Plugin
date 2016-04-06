@@ -30,7 +30,7 @@ Matt West < https://github.com/mhwest13/OpenTracker-Munin-Plugin >
 GPLv2
 
 =head1 MAGIC MARKERS
-  
+
 #%# family=auto
 #%# capabilities=autoconf suggest
 
@@ -42,7 +42,7 @@ use warnings;
 use File::Basename;
 use LWP::UserAgent;
 
-if (basename($0) !~ /^opentracker_/) {
+if (basename($0) !~ /^opentracker(4|6|)_/) {
     print "This script needs to be named opentracker_ and have symlinks which start the same.\n";
     exit 1;
 }
@@ -193,8 +193,8 @@ $graphs{udp4} = {
 =head2 Config Check
 
     This block of code looks at the argument that is possibly supplied,
-    should it be config, it then checks to make sure the plugin 
-    specified exists, assuming it does, it will run the do_config 
+    should it be config, it then checks to make sure the plugin
+    specified exists, assuming it does, it will run the do_config
     subroutine for the plugin specified, otherwise it dies complaining
     about an unknown plugin.
 
@@ -202,8 +202,8 @@ $graphs{udp4} = {
 
 if (defined $ARGV[0] && $ARGV[0] eq 'config') {
     # Lets take the plugin from the execution name.
-    $0 =~ /opentracker_(.+)*/;
-    my $plugin = $1;
+    $0 =~ /opentracker(4|6|)_(.+)*/;
+    my $plugin = $2;
     # And lets make sure we have a plugin called that.
     die 'Unknown Plugin Specified: ' . ($plugin ? $plugin : '') unless $graphs{$plugin};
     # Now lets go ahead and print out our config.
@@ -268,8 +268,8 @@ fetch_output();
 
 sub fetch_output {
     # Lets figure out what plugin they want to run, and check that it exists
-    $0 =~ /opentracker_(.+)*/;
-    my $plugin = $1;
+    $0 =~ /opentracker(4|6|)_(.+)*/;
+    my $plugin = $2;
     die 'Unknown Plugin Specified: ' . ($plugin ? $plugin : '') unless $graphs{$plugin};
     # Lets print out the data for our plugin
     print_output($plugin);
@@ -291,7 +291,7 @@ sub print_output {
     # Lets get our plugin, set our graph information, and print for Munin to process
     my ($plugin) = (@_);
     my $graph = $graphs{$plugin};
-    print "graph opentracker_$plugin\n";
+    print "graph $0\n";
     # Getting keys to pass to fetch_stats for data retrieval
     # call up fetch_stats with the keys we just got.
     my @keys = @{$graph->{keys}};
@@ -313,7 +313,7 @@ sub print_output {
     This subroutine prints out the main config information for all of the graphs.
     It takes one parameters, $plugin
 
-        $plugin;    graph being called up to print config for 
+        $plugin;    graph being called up to print config for
 
     Example:  print_config($plugin);
 
@@ -323,7 +323,7 @@ sub print_config {
     # Lets get our plugin and graph, after that print for Munin to process it.
     my ($plugin) = (@_);
     my $graph = $graphs{$plugin};
-    print "graph opentracker_$plugin\n";
+    print "graph $0\n";
     # Lets print out graph's main config info.
     my %graphconf = %{$graph->{config}};
     while ( my ($key, $value) = each(%graphconf)) {
