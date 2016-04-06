@@ -207,7 +207,7 @@ if (defined $ARGV[0] && $ARGV[0] eq 'config') {
     # And lets make sure we have a plugin called that.
     die 'Unknown Plugin Specified: ' . ($plugin ? $plugin : '') unless $graphs{$plugin};
     # Now lets go ahead and print out our config.
-    print_config($plugin);
+    print_config($plugin, $1);
 	exit 0;
 }
 
@@ -272,7 +272,7 @@ sub fetch_output {
     my $plugin = $2;
     die 'Unknown Plugin Specified: ' . ($plugin ? $plugin : '') unless $graphs{$plugin};
     # Lets print out the data for our plugin
-    print_output($plugin);
+    print_output($plugin, $1);
     return;
 }
 
@@ -289,9 +289,9 @@ sub fetch_output {
 
 sub print_output {
     # Lets get our plugin, set our graph information, and print for Munin to process
-    my ($plugin) = (@_);
+    my ($plugin) = (@_)[0];
     my $graph = $graphs{$plugin};
-    print "graph $0\n";
+    print "graph opentracker" . (@_)[1] . "_$plugin\n";
     # Getting keys to pass to fetch_stats for data retrieval
     # call up fetch_stats with the keys we just got.
     my @keys = @{$graph->{keys}};
@@ -321,9 +321,9 @@ sub print_output {
 
 sub print_config {
     # Lets get our plugin and graph, after that print for Munin to process it.
-    my ($plugin) = (@_);
+    my ($plugin) = (@_)[0];
     my $graph = $graphs{$plugin};
-    print "graph $0\n";
+    print "graph opentracker" . (@_)[1] . "_$plugin\n";
     # Lets print out graph's main config info.
     my %graphconf = %{$graph->{config}};
     while ( my ($key, $value) = each(%graphconf)) {
