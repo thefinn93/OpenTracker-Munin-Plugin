@@ -19,7 +19,6 @@ This plugin graphs the stats information which come out of OpenTracker.
 1. Install the dependencies:
  * `File::Basename`
  * `LWP::UserAgent`
-
 2. Inform Munin of plugin dependencies, add necessary options. In `/etc/munin/plugin-conf.d/opentracker`, configure any options that may be needed
 ```
 [opentracker*]
