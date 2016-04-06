@@ -327,7 +327,12 @@ sub print_config {
     # Lets print out graph's main config info.
     my %graphconf = %{$graph->{config}};
     while ( my ($key, $value) = each(%graphconf)) {
-        print "graph_$key $value\n";
+        if ((@_)[1] ne '' && $key eq 'title') {
+          # If we're named opentracker<something>_<plugin> then we need to display <something> in the title
+          print "graph_$key $value (".(@_)[1].")\n";
+        } else {
+          print "graph_$key $value\n";
+        }
     }
     # Lets print our graphs per graph config info.
     foreach my $dsrc (@{$graph->{datasrc}}) {
